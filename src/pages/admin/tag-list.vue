@@ -11,7 +11,7 @@
         <div class="ml-3 w-30 mr-5">
           <!-- 日期选择组件（区间选择） -->
           <el-date-picker v-model="pickDate" type="daterange" range-separator="至" start-placeholder="开始时间"
-                          end-placeholder="结束时间" size="default" :shortcuts="shortcuts" @change="datepickerChange" />
+                          end-placeholder="结束时间" size="default" :shortcuts="shortcuts" @change="datepickerChange"/>
         </div>
 
         <el-button type="primary" class="ml-3" :icon="Search" @click="getTableData">查询</el-button>
@@ -24,9 +24,10 @@
       <div class="mb-5">
         <el-button type="primary" @click="addCategoryBtnClick">
           <el-icon class="mr-1">
-            <Plus />
+            <Plus/>
           </el-icon>
-          新增</el-button>
+          新增
+        </el-button>
       </div>
 
       <!-- 分页列表 -->
@@ -36,12 +37,13 @@
             <el-tag class="ml-2" type="success">{{ scope.row.name }}</el-tag>
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width="180" />
+        <el-table-column prop="articlesTotal" label="文章数" width="100"/>
+        <el-table-column prop="createTime" label="创建时间" width="180"/>
         <el-table-column label="操作">
           <template #default="scope">
             <el-button type="danger" size="small" @click="deleteTagSubmit(scope.row)">
               <el-icon class="mr-1">
-                <Delete />
+                <Delete/>
               </el-icon>
               删除
             </el-button>
@@ -53,7 +55,7 @@
       <div class="mt-10 flex justify-center">
         <el-pagination v-model:current-page="current" v-model:page-size="size" :page-sizes="[10, 20, 50]"
                        :small="false" :background="true" layout="total, sizes, prev, pager, next, jumper" :total="total"
-                       @size-change="handleSizeChange" @current-change="getTableData" />
+                       @size-change="handleSizeChange" @current-change="getTableData"/>
       </div>
 
     </el-card>
@@ -68,7 +70,7 @@
           </el-tag>
           <span class="w-20">
                         <el-input v-if="inputVisible" ref="InputRef" v-model="inputValue" class="ml-1 w-20" size="small"
-                                  @keyup.enter="handleInputConfirm" @blur="handleInputConfirm" />
+                                  @keyup.enter="handleInputConfirm" @blur="handleInputConfirm"/>
                     <el-button v-else class="button-new-tag ml-1" size="small" @click="showInput">
                         + 新增标签
                     </el-button>
@@ -81,11 +83,11 @@
 </template>
 
 <script setup>
-import { Search, RefreshRight } from '@element-plus/icons-vue'
-import { ref, reactive, nextTick } from 'vue'
-import { getTagPageList, addTag, deleteTag } from '@/api/admin/tag'
+import {Search, RefreshRight} from '@element-plus/icons-vue'
+import {ref, reactive, nextTick} from 'vue'
+import {getTagPageList, addTag, deleteTag} from '@/api/admin/tag'
 import moment from 'moment'
-import { showMessage, showModel } from '@/composables/util'
+import {showMessage, showModel} from '@/composables/util'
 import FormDialog from '@/components/FormDialog.vue'
 
 // 分页查询的标签名称
@@ -153,7 +155,13 @@ function getTableData() {
   tableLoading.value = true
   // 调用后台分页接口，并传入所需参数
 
-  getTagPageList({ current: current.value, size: size.value, startDate: startDate.value, endDate: endDate.value, name: searchTagName.value })
+  getTagPageList({
+    current: current.value,
+    size: size.value,
+    startDate: startDate.value,
+    endDate: endDate.value,
+    name: searchTagName.value
+  })
       .then((res) => {
         if (res.success == true) {
 
@@ -165,6 +173,7 @@ function getTableData() {
       })
       .finally(() => tableLoading.value = false) // 隐藏表格 loading
 }
+
 getTableData()
 
 // 每页展示数量变更事件

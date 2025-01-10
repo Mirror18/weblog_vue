@@ -32,6 +32,7 @@
       <!-- 分页列表 -->
       <el-table :data="tableData" border stripe style="width: 100%" v-loading="tableLoading">
         <el-table-column prop="name" label="分类名称" width="180" />
+        <el-table-column prop="articlesTotal" label="文章数" width="100" />
         <el-table-column prop="createTime" label="创建时间" width="180" />
         <el-table-column label="操作" >
           <template #default="scope">
@@ -67,11 +68,11 @@
 </template>
 
 <script setup>
-import {Search, RefreshRight} from '@element-plus/icons-vue'
-import {ref, reactive} from 'vue'
-import {getCategoryPageList, addCategory, deleteCategory} from '@/api/admin/category'
+import { Search, RefreshRight } from '@element-plus/icons-vue'
+import { ref, reactive } from 'vue'
+import { getCategoryPageList, addCategory, deleteCategory } from '@/api/admin/category'
 import moment from 'moment'
-import {showMessage, showModel} from '@/composables/util'
+import { showMessage, showModel } from '@/composables/util'
 import FormDialog from '@/components/FormDialog.vue'
 
 // 分页查询的分类名称
@@ -139,13 +140,7 @@ function getTableData() {
   tableLoading.value = true
   // 调用后台分页接口，并传入所需参数
 
-  getCategoryPageList({
-    current: current.value,
-    size: size.value,
-    startDate: startDate.value,
-    endDate: endDate.value,
-    name: searchCategoryName.value
-  })
+  getCategoryPageList({current: current.value, size: size.value, startDate: startDate.value, endDate: endDate.value, name: searchCategoryName.value})
       .then((res) => {
         if (res.success == true) {
 
@@ -157,7 +152,6 @@ function getTableData() {
       })
       .finally(() => tableLoading.value = false) // 隐藏表格 loading
 }
-
 getTableData()
 
 // 每页展示数量变更事件
@@ -200,7 +194,7 @@ const rules = {
       message: '分类名称不能为空',
       trigger: 'blur',
     },
-    {min: 1, max: 20, message: '分类名称字数要求大于 1 个字符，小于 20 个字符', trigger: 'blur'},
+    { min: 1, max: 20, message: '分类名称字数要求大于 1 个字符，小于 20 个字符', trigger: 'blur' },
   ]
 }
 
